@@ -149,12 +149,36 @@ enum class ClientMsgID : uint16_t
 /**
  * @brief C→S: 登录请求
  *
- * 客户端发送账号密码，由 GatewayServer 转发至 RecordServer 验证。
+ * 客户端发送账号密码及所选游戏区，由 LoginServer/Gateway 验证并路由。
  */
 struct Msg_C2S_LoginReq
 {
-    char account[32];   /**< 账号（明文，实际应加密） */
-    char password[32];  /**< 密码（明文，实际应加密或使用 token） */
+    char     account[32];   /**< 账号 */
+    char     password[32];  /**< 密码 */
+    uint32_t zoneId;        /**< 所选游戏区号，对应 ZoneInfo.zone_id */
+    uint8_t  gameType;      /**< 游戏类型，对应 ZoneInfo.game_type */
+    uint8_t  reserved[3];   /**< 对齐保留 */
+};
+
+/**
+ * @brief C→S: 注册请求
+ */
+struct Msg_C2S_RegisterReq
+{
+    char     account[32];
+    char     password[32];
+    uint32_t zoneId;
+    uint8_t  gameType;
+    uint8_t  reserved[3];
+};
+
+/**
+ * @brief S→C: 注册响应
+ */
+struct Msg_S2C_RegisterRsp
+{
+    int32_t code;     /**< 0=成功, 1=账号已存在, -1=服务器错误 */
+    char    msg[64];
 };
 
 /**
