@@ -165,11 +165,12 @@ struct Msg_C2S_LoginReq
  */
 struct Msg_C2S_RegisterReq
 {
-    char     account[32];
-    char     password[32];
-    uint32_t zoneId;
-    uint8_t  gameType;
-    uint8_t  reserved[3];
+    char     account[32];          /**< 账号 */
+    char     password[32];         /**< 密码 */
+    char     confirmPassword[32];  /**< 确认密码 */
+    uint32_t zoneId;               /**< 所选游戏区号 */
+    uint8_t  gameType;             /**< 游戏类型 */
+    uint8_t  reserved[3];          /**< 对齐保留 */
 };
 
 /**
@@ -177,8 +178,9 @@ struct Msg_C2S_RegisterReq
  */
 struct Msg_S2C_RegisterRsp
 {
-    int32_t code;     /**< 0=成功, 1=账号已存在, -1=服务器错误 */
-    char    msg[64];
+    int32_t  code;   /**< 0=成功,1=账号已存在,2=参数非法,3=区不可用,-1=服务器错误 */
+    char     msg[64];
+    uint64_t accid;  /**< 注册成功后分配的账号ID，失败时为0 */
 };
 
 /**
