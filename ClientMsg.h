@@ -212,6 +212,17 @@ struct Msg_S2C_GatewayInfo
 constexpr uint16_t MAX_ZONE_LIST_ENTRIES = 64;
 
 /**
+ * @brief 游戏区负载等级（S2C_ZONE_LIST_RSP 单条 loadLevel 字段）
+ */
+enum class ZoneLoadLevel : uint8_t
+{
+    SMOOTH      = 0,  /**< 畅通：在线低于 maxOnline 的 50% */
+    BUSY        = 1,  /**< 繁忙：50%–80% */
+    FULL        = 2,  /**< 爆满：≥ 80% */
+    MAINTENANCE = 3,  /**< 维护：配置 disabled 或区不可达 */
+};
+
+/**
  * @brief C→S: 请求游戏区列表
  *
  * 客户端连接 LoginServer ClientListen（9010）后、登录前发送。
@@ -225,12 +236,16 @@ struct Msg_C2S_ZoneListReq
 /** @brief S→C: 区列表单条 wire 格式（紧随 Msg_S2C_ZoneListRspHeader） */
 struct Msg_S2C_ZoneEntryWire
 {
-    uint32_t zoneId;       /**< 游戏区号 */
-    uint8_t  gameType;     /**< 游戏类型 */
-    uint8_t  enabled;      /**< 1=可登录 0=维护 */
-    char     name[32];     /**< 区服显示名 */
-    char     ip[64];       /**< 入口 IP */
-    uint16_t superPort;    /**< SuperServer 端口 */
+    uint32_t zoneId;        /**< 游戏区号 */
+    uint8_t  gameType;      /**< 游戏类型 */
+    uint8_t  enabled;       /**< 1=可登录 0=维护 */
+    char     name[32];      /**< 区服显示名 */
+    char     ip[64];        /**< 入口 IP */
+    uint16_t superPort;     /**< SuperServer 端口 */
+    uint32_t onlineCount;   /**< 当前在线人数（Super 汇总 Gateway 上报） */
+    uint8_t  loadLevel;     /**< ZoneLoadLevel：畅通/繁忙/爆满/维护 */
+    uint8_t  gatewayCount;  /**< 该区存活网关数 */
+    uint8_t  reserved[2];   /**< 对齐保留 */
 };
 
 /**
