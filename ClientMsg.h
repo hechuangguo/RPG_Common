@@ -65,6 +65,7 @@ enum class ClientMsgID : uint16_t
     S2C_GATEWAY_INFO     = 0x000A,  /**< S→C: LoginServer 下发可用网关地址 */
     C2S_ZONE_LIST_REQ    = 0x000B,  /**< C→S: 请求游戏区列表（LoginServer ClientListen） */
     S2C_ZONE_LIST_RSP    = 0x000C,  /**< S→C: 游戏区列表响应（变长 body） */
+    C2S_GATEWAY_AUTH_REQ = 0x000D,  /**< C→S: Gateway 登录票据鉴权 */
 
     // ============================================================
     //  场景/移动 (0x0101 ~ 0x0107)
@@ -194,9 +195,68 @@ struct Msg_S2C_RegisterRsp
  */
 struct Msg_S2C_LoginRsp
 {
-    int32_t  code;      /**< 错误码：0=成功, 1=账号密码错误, -1=服务器内部错误 */
-    char     msg[64];   /**< 可读的错误描述 */
-    uint64_t userID;    /**< 上次登录用户 ID（0=无用户） */
+    int32_t  code;           /**< 错误码：0=成功, 1=账号密码错误, -1=服务器内部错误 */
+    char     msg[64];        /**< 可读的错误描述 */
+    uint64_t userID;         /**< 上次登录角色 ID（0=无角色） */
+    uint64_t accid;          /**< 账号 ID（LoginServer 登录成功时填充） */
+    char     loginToken[65]; /**< Gateway 鉴权票据（64 hex + '\0'） */
+    uint64_t tokenExpireMs;  /**< 票据过期时间戳（毫秒） */
+};
+
+/**
+ * @brief C→S: Gateway 票据鉴权（连 Gateway 后首包）
+ */
+struct Msg_C2S_GatewayAuthReq
+{
+    char     account[32];    /**< 账号名 */
+    char     loginToken[65]; /**< LoginServer 下发的票据（64 hex + '\0'） */
+    uint32_t zoneId;         /**< 游戏区号 */
+    uint8_t  gameType;       /**< 游戏类型 */
+    uint8_t  reserved[3];    /**< 对齐保留 */
+};
+
+/** @brief S2C_USER_LIST 单条角色 wire 格式 */
+struct Msg_S2C_UserListEntryWire
+{
+    uint64_t userID;    /**< 角色 ID */
+    char     name[32];  /**< 角色名 */
+    uint32_t level;     /**< 等级 */
+    uint8_t  vocation;  /**< 职业 */
+    uint8_t  sex;       /**< 性别 */
+    uint8_t  reserved[2];
+};
+
+/** @brief S2C_USER_LIST 响应头（变长：header + count * EntryWire） */
+struct Msg_S2C_UserListHeader
+{
+    int32_t  code;   /**< 0=成功 */
+    uint16_t count;  /**< 角色条数 */
+};
+static_assert(sizeof(Msg_S2C_UserListHeader) == 6,
+              "Msg_S2C_UserListHeader must be packed to 6 bytes");
+
+/** @brief C→S: 选择角色进入游戏 */
+struct Msg_C2S_SelectUserReq
+{
+    uint64_t userID;     /**< 要进入的角色 ID */
+    uint64_t loginTxnId; /**< 登录事务幂等键（0 则由 Gateway 生成） */
+};
+
+/** @brief C→S: 创建角色 */
+struct Msg_C2S_CreateUserReq
+{
+    char     name[32]; /**< 角色名 */
+    uint8_t  vocation; /**< 职业 */
+    uint8_t  sex;      /**< 性别 */
+    uint8_t  reserved[2];
+};
+
+/** @brief S→C: 创建角色响应 */
+struct Msg_S2C_CreateUserRsp
+{
+    int32_t  code;   /**< 0=成功 1=名重复 2=达上限 3=名非法 */
+    char     msg[64];
+    uint64_t userID; /**< 新角色 ID */
 };
 
 /**
