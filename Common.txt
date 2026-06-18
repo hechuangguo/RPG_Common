@@ -1,22 +1,45 @@
-Common 目录消息分类（每组 XxxCommon.h + XxxMsg.h）：
-
-| 域 | Common 头 | Msg 头 | 说明 |
-|----|-----------|--------|------|
-| 登录 | LoginCommon.h | LoginMsg.h | 登录、注册、创角、选角、进世界；心跳/踢线/网关错误 |
-| 区服 | ZoneCommon.h | ZoneMsg.h | 区列表、负载等级；跨区预留 |
-| 充值 | GoldCommon.h | GoldMsg.h | 充值相关（预留） |
-| 社交 | RelationCommon.h | RelationMsg.h | 好友、队伍、公会（预留 wire） |
-| 属性 | PropertyCommon.h | PropertyMsg.h | 战斗、任务（预留 wire） |
-| 技能 | SpellCommon.h | SpellMsg.h | 技能（预留） |
-| 地图 | MapDataCommon.h | MapDataMsg.h | 移动、视野实体、NPC 对话 |
-| 聊天 | ChatCommon.h | ChatMsg.h | 聊天、私聊、系统公告 |
-| 装备 | EquipCommon.h | EquipMsg.h | 背包、装备（预留 wire） |
-
-全局路由：ClientTypes.h（ClientModule 指令编号）
-body 前缀：ClientMsgBody.h（initClientMsg / clientMsgBodyMatches）
-子编号：各域 XxxMsgSub : uint8_t（定义于 *Common.h）
-网络帧：NetDefine.h、MsgId.h
-废弃聚合：ClientMsg.h（过渡期兼容，新代码请按域 include）
-
-wire v2：body 前两字节为 module+sub，与 MsgHeader 一致（破坏性变更，需 Client 同步）
-
+Common 目录消息分类（每组 XxxCommon.h + XxxMsg.h）：
+
+
+
+| 域 | Common 头 | Msg 头 | 说明 |
+
+|----|-----------|--------|------|
+
+| 登录 | LoginCommon.h | LoginMsg.h | 登录、注册、创角、选角、进世界；心跳/踢线/网关错误 |
+
+| 区服 | ZoneCommon.h | ZoneMsg.h | 区列表、负载等级；跨区预留 |
+
+| 充值 | GoldCommon.h | GoldMsg.h | 充值相关（预留） |
+
+| 社交 | RelationCommon.h | RelationMsg.h | 好友、队伍、公会（预留 wire） |
+
+| 属性 | PropertyCommon.h | PropertyMsg.h | 战斗、任务（预留 wire） |
+
+| 技能 | SpellCommon.h | SpellMsg.h | 技能（预留） |
+
+| 地图 | MapDataCommon.h | MapDataMsg.h | 移动、视野实体、NPC 对话 |
+
+| 聊天 | ChatCommon.h | ChatMsg.h | 聊天、私聊、系统公告 |
+
+| 装备 | EquipCommon.h | EquipMsg.h | 背包、装备（预留 wire） |
+
+
+
+全局路由：ClientTypes.h（ClientModule 指令编号）
+
+body 前缀：ClientMsgBody.h（initClientMsg / clientMsgBodyMatches）
+
+子编号：各域 XxxMsgSub : uint8_t（定义于 *Common.h）
+
+网络帧：NetDefine.h、MsgId.h
+
+废弃聚合：ClientMsg.h（过渡期兼容，新代码请按域 include）
+
+
+
+wire v2：body 前两字节为 module+sub，与 MsgHeader 一致（破坏性变更，需 Client 同步）
+
+注释规范：字段与错误码权威定义在各域 *Msg.h / *Common.h；细则见 RPG_Server docs/COMMENTS.md §Common 协议头
+
+

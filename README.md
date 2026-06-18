@@ -17,10 +17,11 @@ Server 与 Client **共用**的客户端 wire 协议头文件仓库。
 
 ## 新增消息 workflow
 
-1. 在 `XxxCommon.h` 增加 `XxxMsgSub : uint8_t` 子编号
+1. 在 `XxxCommon.h` 增加 `XxxMsgSub : uint8_t` 子编号（枚举值加 `/**< */`）
 2. 在 `XxxMsg.h` 定义 struct：`kModule`/`kSub` + wire 字段 `module`/`sub` 前缀
-3. 发送前调用 `initClientMsg(msg)`；`SendMsg(conn, MsgT::kModule, MsgT::kSub, &msg, sizeof(msg))`
-4. 若新增域，在 `ClientTypes.h` 补 `ClientModule`
+3. 为 struct 写块注释（方向、module/sub、触发时机）并为每个 wire 字段加 `/**< */`（见 `docs/COMMENTS.md` Common 协议头专节）
+4. 发送前调用 `initClientMsg(msg)`；`SendMsg(conn, MsgT::kModule, MsgT::kSub, &msg, sizeof(msg))`
+5. 若新增域，在 `ClientTypes.h` 补 `ClientModule`
 
 ---
 
