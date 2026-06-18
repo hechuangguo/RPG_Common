@@ -30,3 +30,10 @@ constexpr uint32_t makeMsgKey(uint16_t flatMsgId)
 {
     return static_cast<uint32_t>(flatMsgId);
 }
+
+/** @brief 从 wire 消息 struct 类型得到扁平协议号（日志/调试） */
+template<typename MsgT>
+constexpr uint16_t clientMsgFlatId()
+{
+    return makeMsgId(MsgT::kModule, MsgT::kSub);
+}

@@ -4,11 +4,23 @@ Server 与 Client **共用**的客户端 wire 协议头文件仓库。
 
 | 文件 | 说明 |
 |------|------|
-| `ClientMsg.h` | `ClientModule`、`ClientMsgID`、`Msg_C2S_*` / `Msg_S2C_*` |
+| `ClientTypes.h` | `ClientModule` 指令编号（BYTE） |
+| `ClientMsgBody.h` | body 前缀、`initClientMsg`、`clientMsgBodyMatches` |
+| `XxxCommon.h` | 域内 `XxxMsgSub`、常量、辅助结构 |
+| `XxxMsg.h` | wire struct（首字段 `module`/`sub`，含 `kModule`/`kSub`） |
 | `NetDefine.h` | 客户端侧 `MsgHeader`（6 字节帧）与缓冲区常量 |
-| `MsgId.h` | `makeMsgId` / `msgModule` / `msgSub` |
+| `MsgId.h` | `makeMsgId` / `clientMsgFlatId` 等工具 |
 
-线上帧：`bodyLen (2B) + module (1B) + sub (1B) + body`。
+线上帧：`bodyLen (2B) + module (1B) + sub (1B) + body`；**body 前两字节与头部 module/sub 一致**（wire v2）。
+
+---
+
+## 新增消息 workflow
+
+1. 在 `XxxCommon.h` 增加 `XxxMsgSub : uint8_t` 子编号
+2. 在 `XxxMsg.h` 定义 struct：`kModule`/`kSub` + wire 字段 `module`/`sub` 前缀
+3. 发送前调用 `initClientMsg(msg)`；`SendMsg(conn, MsgT::kModule, MsgT::kSub, &msg, sizeof(msg))`
+4. 若新增域，在 `ClientTypes.h` 补 `ClientModule`
 
 ---
 
@@ -20,11 +32,7 @@ Server 与 Client **共用**的客户端 wire 协议头文件仓库。
 | [RPG_Client](https://github.com/hechuangguo/RPG_Client)（Client） | `Common/` |
 
 ```bash
-# 已配置 .gitmodules 的仓库
 git submodule update --init --recursive
-
-# Client 仓库首次添加
-git submodule add -b main https://github.com/hechuangguo/RPG_Common.git Common
 ```
 
 Server 详细文档：[RPG/docs/COMMON.md](https://github.com/hechuangguo/RPG/blob/main/docs/COMMON.md)
@@ -33,30 +41,13 @@ Server 详细文档：[RPG/docs/COMMON.md](https://github.com/hechuangguo/RPG/bl
 
 ## 修改协议
 
-1. 在 `Common/` 子模块目录内编辑、`git commit`、`git push origin main`（推到 **本仓库** RPG_Common）
-2. 回到主仓库（RPG 或 RPG_Client），`git add Common`，commit submodule 指针并 push
+1. 在 `Common/` 子模块目录内编辑、`git commit`、`git push origin main`
+2. 回到主仓库，`git add Common`，commit submodule 指针并 push
 3. 对方执行 `git pull --recurse-submodules`
-
-```bash
-cd Common
-git checkout main
-# 编辑 ClientMsg.h 等
-git add . && git commit -m "feat(protocol): ..."
-git push origin main
-cd ..
-git add Common && git commit -m "chore: bump Common" && git push
-```
 
 ---
 
 ## 禁止事项
 
-- **不要**在 Server 或 Client 主仓库内复制一份 `ClientMsg.h` 独立维护
-- **不要**把服间协议（`InternalMsg.h`）放进本仓库；服间协议仅属于 Server 仓库
-
----
-
-## 相关链接
-
-- 仓库：https://github.com/hechuangguo/RPG_Common
-- Server 协议参考：https://github.com/hechuangguo/RPG/blob/main/docs/PROTOCOL.md
+- **不要**在 Server 或 Client 主仓库内复制一份协议头独立维护
+- **不要**把服间协议（`InternalMsg.h`）放进本仓库

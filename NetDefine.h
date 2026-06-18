@@ -19,6 +19,11 @@ constexpr ConnID INVALID_CONN_ID = 0;
 
 #pragma pack(push, 1)
 
+/**
+ * @brief 二进制消息头（定长 6 字节）
+ *
+ * 线上帧 = MsgHeader + Body；body 前两字节为 module/sub 自描述前缀（见 ClientMsgBody.h）。
+ */
 struct MsgHeader
 {
     uint16_t bodyLen;
