@@ -26,6 +26,17 @@ enum class LoginMsgSub : uint8_t
     S2C_ENTER_GAME       = 0x09, /**< S→C: 进入游戏世界；处理方 Gateway */
     S2C_GATEWAY_INFO     = 0x0A, /**< S→C: 下发网关地址；处理方 LoginServer */
     C2S_GATEWAY_AUTH_REQ = 0x0D, /**< C→S: Gateway 首包票据鉴权；处理方 Gateway */
+    C2S_LOGOUT_REQ       = 0x0E, /**< C→S: 离世界/退出；处理方 GatewayServer */
+    S2C_LOGOUT_RSP       = 0x0F, /**< S→C: 离世界响应；处理方 GatewayServer */
+};
+
+/**
+ * @brief C2S_LOGOUT_REQ.action：客户端退出意图
+ */
+enum class LogoutAction : uint8_t
+{
+    RETURN_CHAR_SELECT = 1, /**< 回选角，保持 Gateway 账号会话 */
+    RETURN_LOGIN       = 2, /**< 回登录 UI，客户端随后断 Gateway */
 };
 
 /** @brief 系统域子编号（module=SYSTEM） */
@@ -49,11 +60,20 @@ enum class GatewayValidateCode : int32_t
     RATE_LIMITED = 5, /**< 频率限制 */
 };
 
-/** @brief 角色名最小长度（创角校验参考） */
-constexpr uint32_t MIN_ROLE_NAME_LEN = 2;
+/** @brief 角色名最少码点数（创角校验，规则见 sdk/util/RoleNameUtil.h） */
+constexpr uint32_t MIN_ROLE_NAME_CHAR_COUNT = 2;
 
-/** @brief 角色名最大长度（创角校验参考） */
-constexpr uint32_t MAX_ROLE_NAME_LEN = 16;
+/** @brief 角色名最多码点数 */
+constexpr uint32_t MAX_ROLE_NAME_CHAR_COUNT = 12;
+
+/** @brief wire/DB 角色名最大 UTF-8 字节数（char[32] 留 \\0） */
+constexpr uint32_t MAX_ROLE_NAME_BYTES = 31;
+
+/** @deprecated 同 MIN_ROLE_NAME_CHAR_COUNT */
+constexpr uint32_t MIN_ROLE_NAME_LEN = MIN_ROLE_NAME_CHAR_COUNT;
+
+/** @deprecated 同 MAX_ROLE_NAME_CHAR_COUNT */
+constexpr uint32_t MAX_ROLE_NAME_LEN = MAX_ROLE_NAME_CHAR_COUNT;
 
 #pragma pack(push, 1)
 
@@ -65,7 +85,7 @@ constexpr uint32_t MAX_ROLE_NAME_LEN = 16;
 struct Msg_S2C_UserListEntryWire
 {
     uint64_t userID;      /**< 角色 ID */
-    char     name[32];    /**< 角色名（UTF-8，以 '\0' 结尾） */
+    char     name[32];    /**< 角色名 UTF-8（2–12 码点，中英文/数字/_） */
     uint32_t level;       /**< 等级 */
     uint8_t  vocation;    /**< 职业 */
     uint8_t  sex;         /**< 性别 */

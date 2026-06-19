@@ -169,7 +169,7 @@ struct Msg_C2S_CreateUserReq
 
     ClientMsgByte module = kModule;
     ClientMsgByte sub    = kSub;
-    char     name[32];               /**< 角色名（长度见 MIN/MAX_ROLE_NAME_LEN） */
+    char     name[32];               /**< 角色名 UTF-8：2–12 码点，≤31 字节；中英文/数字/_ */
     uint8_t  vocation;               /**< 职业 */
     uint8_t  sex;                    /**< 性别 */
     uint8_t  reserved[2];            /**< 对齐保留 */
@@ -237,6 +237,44 @@ struct Msg_S2C_EnterGame
     uint32_t maxHP;                  /**< 生命上限 */
     uint32_t mp;                     /**< 当前法力 */
     uint32_t maxMP;                  /**< 法力上限 */
+};
+
+/**
+ * @brief C→S: 离世界 / 退出
+ *
+ * 方向：Client → GatewayServer
+ * 编号：module=LOGIN(0x00) sub=0x0E
+ * 触发：游戏中 X/ESC 二级弹窗选择「返回选角」或「返回登录」
+ */
+struct Msg_C2S_LogoutReq
+{
+    static constexpr ClientMsgByte kModule = static_cast<ClientMsgByte>(ClientModule::LOGIN);
+    static constexpr ClientMsgByte kSub    = static_cast<ClientMsgByte>(LoginMsgSub::C2S_LOGOUT_REQ);
+
+    ClientMsgByte module = kModule;
+    ClientMsgByte sub    = kSub;
+    uint8_t  action;                 /**< LogoutAction */
+    uint8_t  reserved[3];            /**< 对齐保留 */
+};
+
+/**
+ * @brief S→C: 离世界响应
+ *
+ * 方向：GatewayServer → Client
+ * 编号：module=LOGIN(0x00) sub=0x0F
+ * 触发：C2S_LOGOUT_REQ 处理完毕；code=0 成功
+ */
+struct Msg_S2C_LogoutRsp
+{
+    static constexpr ClientMsgByte kModule = static_cast<ClientMsgByte>(ClientModule::LOGIN);
+    static constexpr ClientMsgByte kSub    = static_cast<ClientMsgByte>(LoginMsgSub::S2C_LOGOUT_RSP);
+
+    ClientMsgByte module = kModule;
+    ClientMsgByte sub    = kSub;
+    int32_t  code;                   /**< 0=成功，非 0=失败 */
+    uint8_t  action;                 /**< 回显 LogoutAction */
+    uint8_t  reserved[3];            /**< 对齐保留 */
+    char     msg[64];                /**< 可读提示（可选） */
 };
 
 /**
