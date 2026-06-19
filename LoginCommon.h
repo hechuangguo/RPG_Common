@@ -20,9 +20,9 @@ enum class LoginMsgSub : uint8_t
     C2S_REGISTER_REQ     = 0x03, /**< C→S: 注册账号；处理方 LoginServer */
     S2C_REGISTER_RSP     = 0x04, /**< S→C: 注册结果；处理方 LoginServer */
     C2S_SELECT_USER_REQ  = 0x05, /**< C→S: 选角进世界；处理方 Gateway→Super */
-    S2C_USER_LIST        = 0x06, /**< S→C: 角色列表（变长）；处理方 LoginServer */
-    C2S_CREATE_USER_REQ  = 0x07, /**< C→S: 创建角色；处理方 LoginServer→Record */
-    S2C_CREATE_USER_RSP  = 0x08, /**< S→C: 创角结果；处理方 LoginServer */
+    S2C_USER_LIST        = 0x06, /**< S→C: 角色列表（变长）；处理方 GatewayServer（鉴权后推送） */
+    C2S_CREATE_USER_REQ  = 0x07, /**< C→S: 创建角色；处理方 Gateway→Record */
+    S2C_CREATE_USER_RSP  = 0x08, /**< S→C: 创角结果；处理方 GatewayServer */
     S2C_ENTER_GAME       = 0x09, /**< S→C: 进入游戏世界；处理方 Gateway */
     S2C_GATEWAY_INFO     = 0x0A, /**< S→C: 下发网关地址；处理方 LoginServer */
     C2S_GATEWAY_AUTH_REQ = 0x0D, /**< C→S: Gateway 首包票据鉴权；处理方 Gateway */

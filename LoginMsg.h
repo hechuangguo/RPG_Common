@@ -118,9 +118,9 @@ struct Msg_C2S_GatewayAuthReq
 /**
  * @brief S→C: 角色列表头（变长包）
  *
- * 方向：LoginServer → Client
+ * 方向：GatewayServer → Client
  * 编号：module=LOGIN(0x00) sub=0x06
- * 触发：登录成功后拉取角色列表
+ * 触发：Gateway 鉴权成功后主动推送；创角成功后刷新
  *
  * 完整 body = sizeof(Msg_S2C_UserListHeader) + count × sizeof(Msg_S2C_UserListEntryWire)
  */
@@ -158,9 +158,9 @@ struct Msg_C2S_SelectUserReq
 /**
  * @brief C→S: 创建角色
  *
- * 方向：Client → LoginServer → RecordServer
+ * 方向：Client → GatewayServer → RecordServer
  * 编号：module=LOGIN(0x00) sub=0x07
- * 触发：角色列表未满时发起创角
+ * 触发：Gateway 鉴权通过（ACCOUNT_OK）且角色列表未满时发起创角
  */
 struct Msg_C2S_CreateUserReq
 {
@@ -178,7 +178,7 @@ struct Msg_C2S_CreateUserReq
 /**
  * @brief S→C: 创建角色响应
  *
- * 方向：LoginServer → Client
+ * 方向：GatewayServer → Client
  * 编号：module=LOGIN(0x00) sub=0x08
  * 触发：C2S_CREATE_USER_REQ 处理完毕；code 见 CreateCharacterError
  */
