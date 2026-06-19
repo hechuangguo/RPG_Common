@@ -60,6 +60,51 @@ enum class GatewayValidateCode : int32_t
     RATE_LIMITED = 5, /**< 频率限制 */
 };
 
+/** @brief 登录结果码（Msg_S2C_LoginRsp.code） */
+enum class LoginResultCode : int32_t
+{
+    OK              = 0,  /**< 成功 */
+    BadCredentials  = 1,  /**< 账号或密码错误 */
+    ServerError     = -1, /**< 服务器错误 */
+};
+
+/** @brief 注册结果码（Msg_S2C_RegisterRsp.code） */
+enum class RegisterResultCode : int32_t
+{
+    OK            = 0,  /**< 成功 */
+    AccountExists = 1,  /**< 账号已存在 */
+    ServerError   = -1, /**< 服务器错误 */
+};
+
+/** @brief 创角结果码（Msg_S2C_CreateUserRsp.code） */
+enum class CreateCharacterResultCode : int32_t
+{
+    OK            = 0,  /**< 成功 */
+    DuplicateName = 1,  /**< 角色名重复等 */
+    ServerError   = -1, /**< 系统错误 */
+};
+
+/** @brief 网关信息结果码（Msg_S2C_GatewayInfo.code） */
+enum class GatewayInfoResultCode : int32_t
+{
+    OK        = 0,  /**< 成功 */
+    NoGateway = -1, /**< 无可用网关 */
+};
+
+/** @brief 角色列表头结果码（Msg_S2C_UserListHeader.code） */
+enum class UserListResultCode : int32_t
+{
+    OK          = 0,  /**< 成功 */
+    ServerError = -1, /**< 服务器错误 */
+};
+
+/** @brief 离世界结果码（Msg_S2C_LogoutRsp.code） */
+enum class LogoutResultCode : int32_t
+{
+    OK     = 0, /**< 成功 */
+    Failed = 1, /**< 失败 */
+};
+
 /** @brief 角色名最少码点数（创角校验，规则见 sdk/util/RoleNameUtil.h） */
 constexpr uint32_t MIN_ROLE_NAME_CHAR_COUNT = 2;
 

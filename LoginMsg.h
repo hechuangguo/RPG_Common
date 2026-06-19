@@ -67,7 +67,7 @@ struct Msg_S2C_RegisterRsp
 
     ClientMsgByte module = kModule;
     ClientMsgByte sub    = kSub;
-    int32_t  code;                   /**< 0=成功；1=账号已存在；-1=服务器错误 */
+    int32_t  code;                   /**< RegisterResultCode */
     char     msg[64];                /**< 提示文案 */
     uint64_t accid;                  /**< 账号 ID（成功时有效） */
 };
@@ -86,7 +86,7 @@ struct Msg_S2C_LoginRsp
 
     ClientMsgByte module = kModule;
     ClientMsgByte sub    = kSub;
-    int32_t  code;                   /**< 0=成功；1=账号或密码错误；-1=服务器错误 */
+    int32_t  code;                   /**< LoginResultCode */
     char     msg[64];                /**< 提示文案 */
     uint64_t userID;                 /**< 上次登录角色 ID（0 表示无） */
     uint64_t accid;                  /**< 账号 ID */
@@ -131,7 +131,7 @@ struct Msg_S2C_UserListHeader
 
     ClientMsgByte module = kModule;
     ClientMsgByte sub    = kSub;
-    int32_t  code;                   /**< 0=成功；-1=服务器错误 */
+    int32_t  code;                   /**< UserListResultCode */
     uint16_t count;                  /**< 尾随 Msg_S2C_UserListEntryWire 条数 */
 };
 static_assert(sizeof(Msg_S2C_UserListHeader) == 8,
@@ -180,7 +180,7 @@ struct Msg_C2S_CreateUserReq
  *
  * 方向：GatewayServer → Client
  * 编号：module=LOGIN(0x00) sub=0x08
- * 触发：C2S_CREATE_USER_REQ 处理完毕；code 见 CreateCharacterError
+ * 触发：C2S_CREATE_USER_REQ 处理完毕；code 见 CreateCharacterResultCode
  */
 struct Msg_S2C_CreateUserRsp
 {
@@ -189,7 +189,7 @@ struct Msg_S2C_CreateUserRsp
 
     ClientMsgByte module = kModule;
     ClientMsgByte sub    = kSub;
-    int32_t  code;                   /**< CreateCharacterError：0=成功；-1=系统错误；1=重名等 */
+    int32_t  code;                   /**< CreateCharacterResultCode */
     char     msg[64];                /**< 提示文案 */
     uint64_t userID;                 /**< 新角色 ID（成功时有效） */
 };
@@ -208,7 +208,7 @@ struct Msg_S2C_GatewayInfo
 
     ClientMsgByte module = kModule;
     ClientMsgByte sub    = kSub;
-    int32_t  code;                   /**< 0=成功；-1=无可用网关 */
+    int32_t  code;                   /**< GatewayInfoResultCode */
     char     gatewayIP[32];          /**< 网关 IP 或域名 */
     uint16_t gatewayPort;            /**< 网关端口 */
     char     msg[64];                /**< 提示文案 */
@@ -271,7 +271,7 @@ struct Msg_S2C_LogoutRsp
 
     ClientMsgByte module = kModule;
     ClientMsgByte sub    = kSub;
-    int32_t  code;                   /**< 0=成功，非 0=失败 */
+    int32_t  code;                   /**< LogoutResultCode */
     uint8_t  action;                 /**< 回显 LogoutAction */
     uint8_t  reserved[3];            /**< 对齐保留 */
     char     msg[64];                /**< 可读提示（可选） */
