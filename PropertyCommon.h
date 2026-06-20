@@ -7,6 +7,7 @@
  */
 
 #pragma once
+#include "ClientTypes.h"
 #include <cstdint>
 
 /** @brief 战斗/属性协议预留版本 */

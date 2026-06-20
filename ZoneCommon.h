@@ -39,6 +39,21 @@ constexpr uint8_t ZONE_LIST_ALL_GAME_TYPES = 0xFF;
 #pragma pack(push, 1)
 
 /**
+ * @brief 区列表单条 wire v1 格式（无 onlineCount/loadLevel/gatewayCount）
+ *
+ * 旧版 LoginServer 变长 body 尾随条目。
+ */
+struct Msg_S2C_ZoneEntryWireV1
+{
+    uint32_t zoneId;
+    uint8_t  gameType;
+    uint8_t  enabled;
+    char     name[32];
+    char     ip[64];
+    uint16_t superPort;
+};
+
+/**
  * @brief 区列表单条 wire 格式
  *
  * 变长 body 尾随条目，不含 module/sub 前缀。

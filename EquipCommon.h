@@ -7,6 +7,7 @@
  */
 
 #pragma once
+#include "ClientTypes.h"
 #include <cstdint>
 
 /** @brief 背包槽位上限（策划表对齐前占位） */
