@@ -15,7 +15,7 @@
  *
  * 方向：Client → LoginServer（ClientListen 9010）
  * 编号：module=LOGIN(0x00) sub=0x01
- * 触发：连接 LoginServer 后发送账号密码与所选区服
+ * 触发：连接 LoginServer 后发送账号与 passwordDigest（SHA-256(UTF-8 密码)）
  */
 struct Msg_C2S_LoginReq
 {
@@ -25,7 +25,7 @@ struct Msg_C2S_LoginReq
     ClientMsgByte module = kModule;  /**< 指令编号，须与 MsgHeader.module 一致 */
     ClientMsgByte sub    = kSub;     /**< 子编号，须与 MsgHeader.sub 一致 */
     char     account[32];            /**< 账号 */
-    char     password[32];           /**< 密码（明文，仅内网测试环境） */
+    uint8_t  passwordDigest[32];     /**< SHA-256(UTF-8 密码) 32 字节；禁止明文 */
     uint32_t zoneId;                 /**< 所选游戏区 ID */
     uint8_t  gameType;               /**< 游戏类型（多游戏共用登录服时区分） */
     uint8_t  reserved[3];            /**< 对齐保留 */
@@ -46,8 +46,8 @@ struct Msg_C2S_RegisterReq
     ClientMsgByte module = kModule;
     ClientMsgByte sub    = kSub;
     char     account[32];            /**< 账号 */
-    char     password[32];           /**< 密码 */
-    char     confirmPassword[32];    /**< 确认密码（须与 password 一致） */
+    uint8_t  passwordDigest[32];     /**< SHA-256(UTF-8 密码) 32 字节 */
+    uint8_t  confirmPasswordDigest[32]; /**< 确认密码 digest，须与 passwordDigest 一致 */
     uint32_t zoneId;                 /**< 注册所属区 ID */
     uint8_t  gameType;               /**< 游戏类型 */
     uint8_t  reserved[3];            /**< 对齐保留 */

@@ -34,7 +34,7 @@ body 前缀：ClientMsgBody.h（initClientMsg / clientMsgBodyMatches）
 
 网络帧：NetDefine.h、MsgId.h
 
-废弃聚合：ClientMsg.h（过渡期兼容，新代码请按域 include）
+废弃聚合：ClientMsg.h（deprecated；新代码请按域 include *Msg.h）
 
 
 
