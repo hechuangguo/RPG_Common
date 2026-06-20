@@ -10,7 +10,7 @@
 #include <functional>
 #include <string>
 
-/** @brief 单个消息体最大字节数（含 body 内 module/sub 前缀） */
+/** @brief 单个 Protobuf body 最大字节数 */
 constexpr int MAX_PACKET_SIZE    = 65535;
 /** @brief 接收环形缓冲区容量 */
 constexpr int RECV_BUFFER_SIZE   = 131072;
@@ -31,7 +31,7 @@ constexpr ConnID INVALID_CONN_ID = 0;
 /**
  * @brief 二进制消息头（定长 6 字节）
  *
- * 线上帧 = MsgHeader + Body；body 前两字节为 module/sub 自描述前缀（见 ClientMsgBody.h）。
+ * 线上帧 = MsgHeader(6B) + Protobuf body；路由仅靠头部 module/sub。
  */
 struct MsgHeader
 {
@@ -62,7 +62,7 @@ struct INetCallback
      * @brief 收到完整消息
      * @param module 功能模块号
      * @param sub    子消息号
-     * @param data   消息体（含 module/sub 前缀）
+     * @param data   Protobuf 消息体
      * @param len    消息体长度
      */
     virtual void OnMessage(ConnID id, uint8_t module, uint8_t sub,

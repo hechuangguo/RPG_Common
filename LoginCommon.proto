@@ -1,0 +1,66 @@
+// @file LoginCommon.proto
+// @brief 登录域公共 enum（ClientModule::LOGIN = 0x00）
+// wire message 见 LoginMsg.proto
+
+syntax = "proto3";
+
+package rpg.login;
+
+option csharp_namespace = "Rpg.Proto.Login";
+
+// 登录域子编号（module=LOGIN/0x00）
+enum LoginMsgSub {
+  LOGIN_MSG_SUB_UNSPECIFIED = 0;
+  C2S_LOGIN_REQ = 1;           // 0x01 C→S 账号登录；LoginServer
+  S2C_LOGIN_RSP = 2;           // 0x02 S→C 登录结果；LoginServer
+  C2S_REGISTER_REQ = 3;        // 0x03 C→S 注册；LoginServer
+  S2C_REGISTER_RSP = 4;        // 0x04 S→C 注册结果；LoginServer
+  C2S_SELECT_USER_REQ = 5;     // 0x05 C→S 选角进世界；Gateway→Super
+  S2C_USER_LIST = 6;           // 0x06 S→C 角色列表；Gateway
+  C2S_CREATE_USER_REQ = 7;     // 0x07 C→S 创角；Gateway→Record
+  S2C_CREATE_USER_RSP = 8;     // 0x08 S→C 创角结果；Gateway
+  S2C_ENTER_GAME = 9;          // 0x09 S→C 进世界；Gateway
+  S2C_GATEWAY_INFO = 10;       // 0x0A S→C 网关地址；LoginServer
+  C2S_GATEWAY_AUTH_REQ = 13;   // 0x0D C→S Gateway 票据鉴权；Gateway
+  C2S_LOGOUT_REQ = 14;         // 0x0E C→S 离世界；Gateway
+  S2C_LOGOUT_RSP = 15;         // 0x0F S→C 离世界响应；Gateway
+}
+
+enum LogoutAction {
+  LOGOUT_ACTION_UNSPECIFIED = 0;
+  RETURN_CHAR_SELECT = 1; // 回选角，保持 Gateway 账号会话
+  RETURN_LOGIN = 2;       // 回登录 UI，随后断 Gateway
+}
+
+enum LoginResultCode {
+  LOGIN_RESULT_OK = 0;
+  LOGIN_BAD_CREDENTIALS = 1;
+  LOGIN_SERVER_ERROR = 2; // legacy wire -1 映射为此值或直接用 int32 code
+}
+
+enum RegisterResultCode {
+  REGISTER_OK = 0;
+  REGISTER_ACCOUNT_EXISTS = 1;
+  REGISTER_SERVER_ERROR = 2;
+}
+
+enum CreateCharacterResultCode {
+  CREATE_CHARACTER_OK = 0;
+  CREATE_CHARACTER_DUPLICATE_NAME = 1;
+  CREATE_CHARACTER_SERVER_ERROR = 2;
+}
+
+enum GatewayInfoResultCode {
+  GATEWAY_INFO_OK = 0;
+  GATEWAY_INFO_NO_GATEWAY = 1;
+}
+
+enum UserListResultCode {
+  USER_LIST_OK = 0;
+  USER_LIST_SERVER_ERROR = 1;
+}
+
+enum LogoutResultCode {
+  LOGOUT_OK = 0;
+  LOGOUT_FAILED = 1;
+}

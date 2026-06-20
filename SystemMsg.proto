@@ -1,0 +1,35 @@
+// @file SystemMsg.proto
+// @brief 系统域 wire message（module=SYSTEM/0x0F）
+
+syntax = "proto3";
+
+package rpg.system;
+
+option csharp_namespace = "Rpg.Proto.System";
+
+// C→S module=0x0F sub=0x01
+message C2SHeartbeat {
+  uint32 seq = 1;
+}
+
+// S→C module=0x0F sub=0x02
+message S2CHeartbeat {
+  uint32 seq = 1;
+  uint64 server_time = 2; // Unix ms
+}
+
+// S→C module=0x0F sub=0x05
+message S2CError {
+  int32 code = 1; // GatewayValidateCode
+  string msg = 2;
+}
+
+// S→C module=0x0F sub=0x04
+message S2CNotice {
+  string content = 1; // max 512
+}
+
+// S→C module=0x0F sub=0x03
+message S2CKick {
+  string reason = 1;
+}

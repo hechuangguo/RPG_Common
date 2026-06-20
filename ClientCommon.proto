@@ -1,0 +1,22 @@
+// @file ClientCommon.proto
+// @brief 跨域公共 wire 类型（Vec3、协议版本等）
+// 被各域 *Msg.proto import；对照 ClientTypes.h
+
+syntax = "proto3";
+
+package rpg.client;
+
+option csharp_namespace = "Rpg.Proto.Client";
+
+// 三维世界坐标，Y-up（与 Unity 一致）
+message Vec3 {
+  float x = 1; // 世界 X
+  float y = 2; // 世界 Y（高度）
+  float z = 3; // 世界 Z
+}
+
+// 客户端协议版本；Login/Gateway 首包携带，用于 cutover 协商
+message ProtocolVersion {
+  uint32 major = 1; // 主版本，当前 1
+  uint32 minor = 2; // 次版本
+}

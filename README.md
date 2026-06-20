@@ -1,26 +1,32 @@
 # RPG_Common
 
-Server 与 Client **共用**的客户端 wire 协议头文件仓库。
+Server 与 Client **共用**的客户端 wire **消息源**（Protobuf `.proto` + 路由 `.h`）。
 
 | 文件 | 说明 |
 |------|------|
 | `ClientTypes.h` | `ClientModule` 指令编号（BYTE） |
-| `ClientMsgBody.h` | body 前缀、`initClientMsg`、`clientMsgBodyMatches` |
-| `XxxCommon.h` | 域内 `XxxMsgSub`、常量、辅助结构 |
-| `XxxMsg.h` | wire struct（首字段 `module`/`sub`，含 `kModule`/`kSub`） |
-| `NetDefine.h` | 客户端侧 `MsgHeader`（6 字节帧）与缓冲区常量 |
+| `*Common.proto` | 域内 enum（`XxxMsgSub`、结果码等） |
+| `*Msg.proto` | Protobuf wire message |
+| `NetDefine.h` | 客户端侧 `MsgHeader`（6 字节帧） |
 | `MsgId.h` | `makeMsgId` / `clientMsgFlatId` 等工具 |
 
-线上帧：`bodyLen (2B) + module (1B) + sub (1B) + body`；**body 前两字节与头部 module/sub 一致**（wire v2）。
+线上帧：`bodyLen (2B) + module (1B) + sub (1B) + Protobuf body`（body **不含** module/sub 前缀）。
+
+**生成物不在本仓库：**
+
+| 消费方 | 生成目录 | 脚本 |
+|--------|----------|------|
+| RPG_Server | 主仓 `Protobuf/` | `./scripts/gen_proto.sh` 或 `./Build.sh` |
+| Client / Unity | 各自工程内 | 自行从本仓 `.proto` 生成 |
 
 ---
 
 ## 新增消息 workflow
 
-1. 在 `XxxCommon.h` 增加 `XxxMsgSub : uint8_t` 子编号（枚举值加 `/**< */`）
-2. 在 `XxxMsg.h` 定义 struct：`kModule`/`kSub` + wire 字段 `module`/`sub` 前缀
-3. 为 struct 写块注释（方向、module/sub、触发时机）并为每个 wire 字段加 `/**< */`（见 `docs/COMMENTS.md` Common 协议头专节）
-4. 发送前调用 `initClientMsg(msg)`；`SendMsg(conn, MsgT::kModule, MsgT::kSub, &msg, sizeof(msg))`
+1. 在 `XxxCommon.proto` 增加 `XxxMsgSub` 子编号
+2. 在 `XxxMsg.proto` 定义 message，注释方向与触发时机
+3. Server：运行主仓 `./scripts/gen_proto.sh`；Gateway `ClientMsgValidator` + handler
+4. Client：自行 `protoc` 生成对应语言代码
 5. 若新增域，在 `ClientTypes.h` 补 `ClientModule`
 
 ---
@@ -42,13 +48,16 @@ Server 详细文档：[RPG/docs/COMMON.md](https://github.com/hechuangguo/RPG/bl
 
 ## 修改协议
 
-1. 在 `Common/` 子模块目录内编辑、`git commit`、`git push origin main`
-2. 回到主仓库，`git add Common`，commit submodule 指针并 push
-3. 对方执行 `git pull --recurse-submodules`
+1. 在 `Common/` 子模块目录内编辑 `.proto`、`git commit`、`git push origin main`
+2. 回到主仓库执行 `./scripts/gen_proto.sh`（或 `./Build.sh`）刷新 `Protobuf/`
+3. 主仓库 `git add Common Protobuf`（若跟踪生成物则 add Protobuf；默认 `.gitignore` 忽略 pb 文件）
+4. `git commit` + push；主仓 bump Common submodule 指针
+5. 对方执行 `./pull.sh`
 
 ---
 
 ## 禁止事项
 
-- **不要**在 Server 或 Client 主仓库内复制一份协议头独立维护
+- **不要**在 Server 或 Client 主仓库内复制一份协议独立维护
+- **不要**手改 Server 主仓 `Protobuf/*.pb.*`（AUTO-GENERATED）
 - **不要**把服间协议（`InternalMsg.h`）放进本仓库

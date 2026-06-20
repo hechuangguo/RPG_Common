@@ -1,0 +1,24 @@
+// @file ChatMsg.proto
+// @brief 聊天域 wire message（module=CHAT/0x05）
+
+syntax = "proto3";
+
+package rpg.chat;
+
+import "ChatCommon.proto";
+
+option csharp_namespace = "Rpg.Proto.Chat";
+
+// C→S module=0x05 sub=0x01
+message C2SChatReq {
+  ChatChannel channel = 1;
+  string content = 2; // UTF-8，max 256 由 Validator 约束
+}
+
+// S→C module=0x05 sub=0x02
+message S2CChatNotify {
+  uint64 from_id = 1;
+  string from_name = 2;
+  ChatChannel channel = 3;
+  string content = 4;
+}

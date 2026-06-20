@@ -1,0 +1,22 @@
+// @file ZoneCommon.proto
+// @brief 区服域公共 enum（module=LOGIN/0x00 sub=0x0B/0x0C）
+// wire message 见 ZoneMsg.proto
+
+syntax = "proto3";
+
+package rpg.zone;
+
+option csharp_namespace = "Rpg.Proto.Zone";
+
+enum ZoneMsgSub {
+  ZONE_MSG_SUB_UNSPECIFIED = 0;
+  C2S_ZONE_LIST_REQ = 11;  // 0x0B C→S 区列表；LoginServer
+  S2C_ZONE_LIST_RSP = 12;  // 0x0C S→C 区列表；LoginServer
+}
+
+enum ZoneLoadLevel {
+  ZONE_LOAD_SMOOTH = 0;
+  ZONE_LOAD_BUSY = 1;
+  ZONE_LOAD_FULL = 2;
+  ZONE_LOAD_MAINTENANCE = 3;
+}

@@ -1,0 +1,28 @@
+// @file NpcMsg.proto
+// @brief NPC 域 wire message（module=NPC/0x08）
+
+syntax = "proto3";
+
+package rpg.npc;
+
+option csharp_namespace = "Rpg.Proto.Npc";
+
+message NpcTalkOption {
+  string text = 1;       // 选项文案
+  int32 next_step = 2;   // 跳转对话步骤
+}
+
+// C→S module=0x08 sub=0x01
+message C2SNpcTalkReq {
+  uint64 npc_id = 1;
+  int32 dialog_step = 2; // 0=开场
+}
+
+// S→C module=0x08 sub=0x02
+message S2CNpcTalkRsp {
+  int32 code = 1;
+  uint64 npc_id = 2;
+  int32 dialog_step = 3;
+  string text = 4;
+  repeated NpcTalkOption options = 5; // max 4 由 Validator 约束
+}

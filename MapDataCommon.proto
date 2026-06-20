@@ -1,0 +1,35 @@
+// @file MapDataCommon.proto
+// @brief 地图域公共 enum（ClientModule::SCENE = 0x01）
+// 对照 MapDataCommon.h；wire message 见 MapDataMsg.proto
+
+syntax = "proto3";
+
+package rpg.mapdata;
+
+option csharp_namespace = "Rpg.Proto.MapData";
+
+// 场景域子编号（module=SCENE/0x01）
+enum MapDataMsgSub {
+  MAP_DATA_MSG_SUB_UNSPECIFIED = 0;
+  C2S_MOVE_REQ = 1;        // 0x01 C→S 移动请求；Gateway→SceneServer
+  S2C_MOVE_NOTIFY = 2;     // 0x02 S→C 移动广播；Scene→Gateway→客户端
+  S2C_SPAWN_ENTITY = 5;    // 0x05 S→C 实体进视野；Scene→Gateway
+  S2C_DESPAWN_ENTITY = 6;  // 0x06 S→C 实体出视野；Scene→Gateway
+}
+
+// 移动类型（Msg_C2S_MoveReq.moveType）
+enum MoveType {
+  MOVE_TYPE_UNSPECIFIED = 0;
+  MOVE_TYPE_WALK = 1; // 走；步长见 map.meta.json maxStepWalk
+  MOVE_TYPE_RUN = 2;  // 跑；步长见 maxStepRun
+}
+
+// 实体类型（Msg_S2C_SpawnEntity.entityType）
+enum EntityType {
+  ENTITY_TYPE_UNSPECIFIED = 0;
+  ENTITY_TYPE_PLAYER = 1;   // 玩家
+  ENTITY_TYPE_NPC = 2;      // NPC
+  ENTITY_TYPE_MONSTER = 3;  // 怪物
+  ENTITY_TYPE_PET = 4;      // 宠物
+  ENTITY_TYPE_ITEM = 5;     // 地面物品
+}

@@ -1,0 +1,27 @@
+// @file SystemCommon.proto
+// @brief 系统域公共 enum（ClientModule::SYSTEM = 0x0F）
+// wire message 见 SystemMsg.proto
+
+syntax = "proto3";
+
+package rpg.system;
+
+option csharp_namespace = "Rpg.Proto.System";
+
+enum SystemMsgSub {
+  SYSTEM_MSG_SUB_UNSPECIFIED = 0;
+  C2S_HEARTBEAT = 1;  // 0x01 C→S 心跳
+  S2C_HEARTBEAT = 2;  // 0x02 S→C 心跳响应
+  S2C_KICK = 3;       // 0x03 S→C 踢线
+  S2C_NOTICE = 4;     // 0x04 S→C 系统公告
+  S2C_ERROR = 5;      // 0x05 S→C 网关校验错误
+}
+
+enum GatewayValidateCode {
+  GATEWAY_VALIDATE_OK = 0;
+  GATEWAY_VALIDATE_UNKNOWN_MSG = 1;
+  GATEWAY_VALIDATE_BAD_LENGTH = 2;
+  GATEWAY_VALIDATE_BAD_STATE = 3;
+  GATEWAY_VALIDATE_BAD_PAYLOAD = 4;
+  GATEWAY_VALIDATE_RATE_LIMITED = 5;
+}

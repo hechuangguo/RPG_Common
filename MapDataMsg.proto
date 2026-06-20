@@ -1,0 +1,49 @@
+// @file MapDataMsg.proto
+// @brief 地图域 wire message（module=SCENE/0x01）
+// 对照 MapDataMsg.h；sub 枚举见 MapDataCommon.proto
+
+syntax = "proto3";
+
+package rpg.mapdata;
+
+import "ClientCommon.proto";
+import "MapDataCommon.proto";
+
+option csharp_namespace = "Rpg.Proto.MapData";
+
+// C→S module=0x01 sub=0x01
+// 触发：客户端摇杆/点击地面；Gateway 校验后转 SceneServer
+message C2SMoveReq {
+  uint64 user_id = 1;       // 移动者角色 ID
+  rpg.client.Vec3 pos = 2;  // 目标世界坐标，Y-up
+  float dir = 3;            // 朝向（弧度或度，双端约定）
+  MoveType move_type = 4;   // WALK/RUN；步长由 MoveValidator 限制
+}
+
+// S→C module=0x01 sub=0x02
+// 触发：某玩家移动经 AOI 同步给周围玩家
+message S2CMoveNotify {
+  uint64 user_id = 1;
+  rpg.client.Vec3 pos = 2;
+  float dir = 3;
+  MoveType move_type = 4;
+}
+
+// S→C module=0x01 sub=0x05
+// 触发：AOI 进视野或首次进图；Gateway 下行
+message S2CSpawnEntity {
+  uint64 entity_id = 1;
+  string name = 2;              // 显示名
+  uint32 level = 3;             // 等级
+  rpg.client.Vec3 pos = 4;
+  float dir = 5;                // 绕 Y 轴朝向
+  EntityType entity_type = 6;   // 实体类型
+  uint32 model_id = 7;          // Unity Addressable/Prefab key，0=默认
+  uint32 anim_state = 8;        // 客户端动画状态机枚举
+}
+
+// S→C module=0x01 sub=0x06
+// 触发：AOI 通知实体离开视野或下线
+message S2CDespawnEntity {
+  uint64 entity_id = 1;
+}

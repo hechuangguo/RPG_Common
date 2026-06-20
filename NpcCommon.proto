@@ -1,0 +1,15 @@
+// @file NpcCommon.proto
+// @brief NPC 域公共 enum（ClientModule::NPC = 0x08）
+// wire message 见 NpcMsg.proto
+
+syntax = "proto3";
+
+package rpg.npc;
+
+option csharp_namespace = "Rpg.Proto.Npc";
+
+enum NpcMsgSub {
+  NPC_MSG_SUB_UNSPECIFIED = 0;
+  C2S_NPC_TALK_REQ = 1;  // 0x01 C→S NPC 对话；SceneServer→Lua
+  S2C_NPC_TALK_RSP = 2;  // 0x02 S→C 对话响应；SceneServer
+}

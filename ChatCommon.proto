@@ -1,0 +1,24 @@
+// @file ChatCommon.proto
+// @brief 聊天域公共 enum（ClientModule::CHAT = 0x05）
+// wire message 见 ChatMsg.proto
+
+syntax = "proto3";
+
+package rpg.chat;
+
+option csharp_namespace = "Rpg.Proto.Chat";
+
+enum ChatMsgSub {
+  CHAT_MSG_SUB_UNSPECIFIED = 0;
+  C2S_CHAT_REQ = 1;        // 0x01 C→S 频道聊天；SceneServer
+  S2C_CHAT_NOTIFY = 2;     // 0x02 S→C 聊天广播；SceneServer
+  C2S_WHISPER_REQ = 3;     // 0x03 未实现
+  S2C_WHISPER_NOTIFY = 4;  // 0x04 未实现
+}
+
+enum ChatChannel {
+  CHAT_CHANNEL_WORLD = 0;
+  CHAT_CHANNEL_ZONE = 1;
+  CHAT_CHANNEL_TEAM = 2;
+  CHAT_CHANNEL_GUILD = 3;
+}
