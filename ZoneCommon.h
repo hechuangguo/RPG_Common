@@ -84,3 +84,14 @@ inline size_t zoneListBodyLen(uint16_t count)
     constexpr size_t kHeaderBytes = sizeof(ClientMsgBodyHead) + sizeof(int32_t) + sizeof(uint16_t);
     return kHeaderBytes + static_cast<size_t>(count) * sizeof(Msg_S2C_ZoneEntryWire);
 }
+
+/**
+ * @brief 计算 S2C_ZONE_LIST_RSP body 字节数（wire v1 条目）
+ * @param count 区条目数
+ * @return sizeof(header 前缀 + code + count) + count × sizeof(ZoneEntryWireV1)
+ */
+inline size_t zoneListBodyLenV1(uint16_t count)
+{
+    constexpr size_t kHeaderBytes = sizeof(ClientMsgBodyHead) + sizeof(int32_t) + sizeof(uint16_t);
+    return kHeaderBytes + static_cast<size_t>(count) * sizeof(Msg_S2C_ZoneEntryWireV1);
+}
