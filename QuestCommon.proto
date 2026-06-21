@@ -1,0 +1,16 @@
+// @file QuestCommon.proto
+// @brief 任务域公共 enum（ClientModule::QUEST = 0x07）
+// wire message 见 QuestMsg.proto
+
+syntax = "proto3";
+
+package rpg.quest;
+
+option csharp_namespace = "Rpg.Proto.Quest";
+
+enum QuestMsgSub {
+  QUEST_MSG_SUB_UNSPECIFIED = 0;
+  C2S_QUEST_ACCEPT = 1;  // 0x01 C→S 接取任务
+  C2S_QUEST_SUBMIT = 2;  // 0x02 C→S 提交任务
+  S2C_QUEST_INFO = 3;    // 0x03 S→C 任务列表同步
+}

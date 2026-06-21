@@ -1,0 +1,15 @@
+// @file BagCommon.proto
+// @brief 背包域公共 enum（ClientModule::BAG = 0x03）
+// wire message 见 BagMsg.proto
+
+syntax = "proto3";
+
+package rpg.bag;
+
+option csharp_namespace = "Rpg.Proto.Bag";
+
+enum BagMsgSub {
+  BAG_MSG_SUB_UNSPECIFIED = 0;
+  C2S_BAG_INFO_REQ = 1;   // 0x01 C→S 请求背包
+  S2C_BAG_INFO_RSP = 2;   // 0x02 S→C 背包同步
+}

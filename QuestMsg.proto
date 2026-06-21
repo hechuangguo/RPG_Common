@@ -1,0 +1,32 @@
+// @file QuestMsg.proto
+// @brief 任务域 wire message（module=QUEST/0x07）
+
+syntax = "proto3";
+
+package rpg.quest;
+
+option csharp_namespace = "Rpg.Proto.Quest";
+
+// C→S module=0x07 sub=0x01
+message C2SQuestAcceptReq {
+  uint32 quest_id = 1;
+}
+
+// C→S module=0x07 sub=0x02
+message C2SQuestSubmitReq {
+  uint32 quest_id = 1;
+}
+
+// S→C module=0x07 sub=0x03
+message S2CQuestInfo {
+  int32 code = 1; // 0=成功
+  repeated QuestEntry entries = 2;
+}
+
+message QuestEntry {
+  uint32 quest_id = 1;
+  string name = 2;
+  uint32 progress = 3;
+  uint32 target = 4;
+  bool done = 5;
+}

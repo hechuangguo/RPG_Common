@@ -5,7 +5,7 @@ Server 与 Client **共用**的客户端 wire **消息源**（仅 Protobuf `.pro
 | 文件 | 说明 |
 |------|------|
 | `ClientCommon.proto` | 跨域：`ClientModule`、`Vec3`、`ProtocolVersion` |
-| `WireCommon.proto` | 6 字节帧常量、`WireMsgHeader`、FlatMsgId 约定 |
+| `WireCommon.proto` | 4 字节帧常量、`WireMsgHeader`、FlatMsgId 约定 |
 | `*Common.proto` | 域内 enum（`XxxMsgSub`、结果码等） |
 | `*Msg.proto` | Protobuf wire message |
 

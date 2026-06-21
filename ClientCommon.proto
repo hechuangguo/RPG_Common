@@ -13,11 +13,11 @@ enum ClientModule {
   LOGIN = 0;   // 登录/注册/选角/区列表；LoginCommon、ZoneCommon
   SCENE = 1;   // 场景、移动；MapDataCommon
   BATTLE = 2;  // 战斗（未实现）
-  BAG = 3;     // 背包/物品（未实现）
+  BAG = 3;     // 背包/物品；BagCommon
   SKILL = 4;   // 技能（未实现）
   CHAT = 5;    // 聊天；ChatCommon
   SOCIAL = 6;  // 社交（未实现）
-  QUEST = 7;   // 任务（未实现）
+  QUEST = 7;   // 任务；QuestCommon
   NPC = 8;     // NPC 交互；NpcCommon
   reserved 9 to 14;
   SYSTEM = 15; // 心跳/踢线/公告/网关错误；SystemCommon

@@ -9,11 +9,13 @@ Common 目录消息分类（Protobuf 真源：*Common.proto + *Msg.proto + WireC
 | 登录 | LoginCommon.proto | LoginMsg.proto | 登录、注册、创角、选角、进世界 |
 | 区服 | ZoneCommon.proto | ZoneMsg.proto | 区列表、负载等级（module=LOGIN） |
 | 地图 | MapDataCommon.proto | MapDataMsg.proto | 移动、视野实体 |
+| 背包 | BagCommon.proto | BagMsg.proto | 背包同步 |
 | 聊天 | ChatCommon.proto | ChatMsg.proto | 频道聊天 |
+| 任务 | QuestCommon.proto | QuestMsg.proto | 任务接取/提交/同步 |
 | NPC | NpcCommon.proto | NpcMsg.proto | NPC 对话 |
 | 系统 | SystemCommon.proto | SystemMsg.proto | 心跳、踢线、公告、网关错误 |
 
-未实现 module（0x02–0x07）：暂无 .proto，落地时在 ClientCommon.proto 补 ClientModule 并新增域文件。
+未实现 module：BATTLE(0x02)、SKILL(0x04)、SOCIAL(0x06)。
 
 
 

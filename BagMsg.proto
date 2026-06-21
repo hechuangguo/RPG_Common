@@ -1,0 +1,24 @@
+// @file BagMsg.proto
+// @brief 背包域 wire message（module=BAG/0x03）
+
+syntax = "proto3";
+
+package rpg.bag;
+
+option csharp_namespace = "Rpg.Proto.Bag";
+
+// C→S module=0x03 sub=0x01
+message C2SBagInfoReq {
+  uint64 user_id = 1;
+}
+
+// S→C module=0x03 sub=0x02
+message S2CBagInfoRsp {
+  int32 code = 1; // 0=成功
+  repeated BagSlot slots = 2;
+}
+
+message BagSlot {
+  uint32 item_id = 1;
+  uint32 count = 2;
+}
