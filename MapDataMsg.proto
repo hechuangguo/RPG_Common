@@ -1,6 +1,5 @@
 // @file MapDataMsg.proto
-// @brief 地图域 wire message（module=SCENE/0x01）
-// 对照 MapDataMsg.h；sub 枚举见 MapDataCommon.proto
+// @brief 地图域 wire message（module=SCENE/0x01）；sub 见 MapDataCommon.proto
 
 syntax = "proto3";
 
