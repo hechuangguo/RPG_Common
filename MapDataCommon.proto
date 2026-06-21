@@ -1,6 +1,5 @@
 // @file MapDataCommon.proto
-// @brief 地图域公共 enum（ClientModule::SCENE = 0x01）
-// 对照 MapDataCommon.h；wire message 见 MapDataMsg.proto
+// @brief 地图域公共 enum（ClientModule::SCENE = 0x01）；wire message 见 MapDataMsg.proto
 
 syntax = "proto3";
 
