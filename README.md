@@ -1,16 +1,17 @@
 # RPG_Common
 
-Server 与 Client **共用**的客户端 wire **消息源**（Protobuf `.proto` + 路由 `.h`）。
+Server 与 Client **共用**的客户端 wire **消息源**（仅 Protobuf `.proto`）。
 
 | 文件 | 说明 |
 |------|------|
-| `ClientTypes.h` | `ClientModule` 指令编号（BYTE） |
+| `ClientCommon.proto` | 跨域：`ClientModule`、`Vec3`、`ProtocolVersion` |
+| `WireCommon.proto` | 6 字节帧常量、`WireMsgHeader`、FlatMsgId 约定 |
 | `*Common.proto` | 域内 enum（`XxxMsgSub`、结果码等） |
 | `*Msg.proto` | Protobuf wire message |
-| `NetDefine.h` | 客户端侧 `MsgHeader`（6 字节帧） |
-| `MsgId.h` | `makeMsgId` / `clientMsgFlatId` 等工具 |
 
 线上帧：`bodyLen (2B) + module (1B) + sub (1B) + Protobuf body`（body **不含** module/sub 前缀）。
+
+**Server 运行时网络栈**（`MsgHeader` struct、`makeMsgId` 等 C++ helper）在 RPG_Server 主仓 `sdk/net/NetDefine.h`、`sdk/net/MsgId.h`；数值须与 `WireCommon.proto` 一致。
 
 **生成物不在本仓库：**
 
@@ -25,9 +26,9 @@ Server 与 Client **共用**的客户端 wire **消息源**（Protobuf `.proto` 
 
 1. 在 `XxxCommon.proto` 增加 `XxxMsgSub` 子编号
 2. 在 `XxxMsg.proto` 定义 message，注释方向与触发时机
-3. Server：运行主仓 `./scripts/gen_proto.sh`；Gateway `ClientMsgValidator` + handler
-4. Client：自行 `protoc` 生成对应语言代码
-5. 若新增域，在 `ClientTypes.h` 补 `ClientModule`
+3. 新域则在 `ClientCommon.proto` 补 `ClientModule`
+4. Server：运行主仓 `./scripts/gen_proto.sh`；Gateway `ClientMsgValidator` + handler
+5. Client：自行 `protoc` 生成对应语言代码
 
 ---
 
@@ -50,9 +51,8 @@ Server 详细文档：[RPG/docs/COMMON.md](https://github.com/hechuangguo/RPG/bl
 
 1. 在 `Common/` 子模块目录内编辑 `.proto`、`git commit`、`git push origin main`
 2. 回到主仓库执行 `./scripts/gen_proto.sh`（或 `./Build.sh`）刷新 `Protobuf/`
-3. 主仓库 `git add Common Protobuf`（若跟踪生成物则 add Protobuf；默认 `.gitignore` 忽略 pb 文件）
-4. `git commit` + push；主仓 bump Common submodule 指针
-5. 对方执行 `./pull.sh`
+3. 主仓库 commit submodule 指针
+4. 对方执行 `./pull.sh`
 
 ---
 

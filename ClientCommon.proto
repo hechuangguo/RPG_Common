@@ -1,12 +1,27 @@
 // @file ClientCommon.proto
-// @brief 跨域公共 wire 类型（Vec3、协议版本等）
-// 被各域 *Msg.proto import；对照 ClientTypes.h
+// @brief 跨域公共 wire 类型（Vec3、协议版本、ClientModule 路由等）
+// 被各域 *Msg.proto import
 
 syntax = "proto3";
 
 package rpg.client;
 
 option csharp_namespace = "Rpg.Proto.Client";
+
+// 客户端功能 module 编号（TCP 帧头 byte2）；子编号见各域 *Common.proto
+enum ClientModule {
+  LOGIN = 0;   // 登录/注册/选角/区列表；LoginCommon、ZoneCommon
+  SCENE = 1;   // 场景、移动；MapDataCommon
+  BATTLE = 2;  // 战斗（未实现）
+  BAG = 3;     // 背包/物品（未实现）
+  SKILL = 4;   // 技能（未实现）
+  CHAT = 5;    // 聊天；ChatCommon
+  SOCIAL = 6;  // 社交（未实现）
+  QUEST = 7;   // 任务（未实现）
+  NPC = 8;     // NPC 交互；NpcCommon
+  reserved 9 to 14;
+  SYSTEM = 15; // 心跳/踢线/公告/网关错误；SystemCommon
+}
 
 // 三维世界坐标，Y-up（与 Unity 一致）
 message Vec3 {

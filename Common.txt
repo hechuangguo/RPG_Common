@@ -1,9 +1,11 @@
-Common 目录消息分类（Protobuf 真源：*Common.proto + *Msg.proto）
+Common 目录消息分类（Protobuf 真源：*Common.proto + *Msg.proto + WireCommon.proto）
 
 
 
 | 域 | Common.proto | Msg.proto | 说明 |
 |----|--------------|-----------|------|
+| 跨域 | ClientCommon.proto | — | ClientModule、Vec3、ProtocolVersion |
+| 帧/路由 | WireCommon.proto | — | 缓冲区上限、WireMsgHeader、FlatMsgId 约定 |
 | 登录 | LoginCommon.proto | LoginMsg.proto | 登录、注册、创角、选角、进世界 |
 | 区服 | ZoneCommon.proto | ZoneMsg.proto | 区列表、负载等级（module=LOGIN） |
 | 地图 | MapDataCommon.proto | MapDataMsg.proto | 移动、视野实体 |
@@ -11,20 +13,12 @@ Common 目录消息分类（Protobuf 真源：*Common.proto + *Msg.proto）
 | NPC | NpcCommon.proto | NpcMsg.proto | NPC 对话 |
 | 系统 | SystemCommon.proto | SystemMsg.proto | 心跳、踢线、公告、网关错误 |
 
-未实现 module（0x02–0x07）：暂无 .proto，落地时新增 *Common.proto / *Msg.proto。
-
-
-
-保留 C++ 头文件：
-
-| 文件 | 说明 |
-|------|------|
-| ClientTypes.h | ClientModule 路由 enum |
-| NetDefine.h / MsgId.h | 6 字节帧与 flat msgId 工具 |
+未实现 module（0x02–0x07）：暂无 .proto，落地时在 ClientCommon.proto 补 ClientModule 并新增域文件。
 
 
 
 生成：RPG_Server 主仓 `./scripts/gen_proto.sh` → `Protobuf/`（C++）；Client 自行生成
 
-注释规范：见 RPG_Server docs/COMMENTS.md §Common Protobuf
+Server C++ 帧工具：sdk/net/NetDefine.h、sdk/net/MsgId.h（与 WireCommon.proto 数值一致）
 
+注释规范：见 RPG_Server docs/COMMENTS.md §Common Protobuf

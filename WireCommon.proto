@@ -1,0 +1,40 @@
+// @file WireCommon.proto
+// @brief TCP 6 字节帧常量、MsgHeader 逻辑结构与 FlatMsgId 约定
+//
+// 线上帧 = 定长 packed 头部（非 protobuf 编码）+ Protobuf body。
+// Server 运行时实现：sdk/net/NetDefine.h、sdk/net/MsgId.h。
+
+syntax = "proto3";
+
+package rpg.client;
+
+option csharp_namespace = "Rpg.Proto.Client";
+
+// 缓冲区与帧上限（与 sdk/net/NetDefine.h 数值一致）
+enum WireBufferLimit {
+  option allow_alias = true;
+  WIRE_BUFFER_LIMIT_UNSPECIFIED = 0;
+  MAX_PACKET_SIZE = 65535;
+  RECV_BUFFER_SIZE = 131072;
+  SEND_BUFFER_SIZE = 131072;
+  MAX_EPOLL_EVENTS = 1024;
+  LISTEN_BACKLOG = 512;
+  MSG_HEADER_SIZE = 6;
+}
+
+// 连接 ID 约定（ConnID = uint32；0 表示无效）
+enum WireConnIdConstant {
+  INVALID_CONN_ID = 0;
+}
+
+// TCP 帧头逻辑视图（线上为 6 字节 packed：uint16 body_len LE + uint8 module + uint8 sub）
+message WireMsgHeader {
+  uint32 body_len = 1; // wire: uint16，Protobuf body 字节数（不含头部）
+  uint32 module = 2;   // wire: uint8，ClientModule
+  uint32 sub = 3;      // wire: uint8，域内 *MsgSub enum
+}
+
+// FlatMsgId 约定（C++/C# 各端自行实现 helper）：
+//   flat_msg_id = (module << 8) | sub
+//   msg_key     = flat_msg_id（uint32）
+// Server：makeMsgId / msgModule / msgSub / makeMsgKey → sdk/net/MsgId.h
