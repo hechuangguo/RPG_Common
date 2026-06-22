@@ -24,6 +24,7 @@ enum LoginMsgSub {
   C2S_GATEWAY_AUTH_REQ = 13;   // 0x0D C→S Gateway 票据鉴权；Gateway
   C2S_LOGOUT_REQ = 14;         // 0x0E C→S 离世界；Gateway
   S2C_LOGOUT_RSP = 15;         // 0x0F S→C 离世界响应；Gateway
+  S2C_LOGIN_CHALLENGE = 16;    // 0x10 S→C 登录挑战 nonce；LoginServer 连接后首包
 }
 
 enum LogoutAction {
