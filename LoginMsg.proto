@@ -23,11 +23,11 @@ message UserListEntry {
 // C→S module=0x00 sub=0x01
 message C2SLoginReq {
   string account = 1;
-  bytes password_digest = 2; // SHA-256(nonce || UTF-8 密码) 32 字节
+  bytes password_digest = 2; // SHA-256(UTF-8 密码) 32 字节；不含 nonce
   uint32 zone_id = 3;
   uint32 game_type = 4;
   rpg.client.ProtocolVersion protocol_version = 5;
-  bytes login_nonce = 7;     // 回显 S2CLoginChallenge.nonce
+  bytes login_nonce = 7;     // 回显 S2CLoginChallenge.nonce（16 字节）
 }
 
 // S→C module=0x00 sub=0x10；LoginServer 连接后下发，单次连接有效
@@ -48,12 +48,12 @@ message S2CLoginRsp {
 // C→S module=0x00 sub=0x03
 message C2SRegisterReq {
   string account = 1;
-  bytes password_digest = 2;           // SHA-256(nonce || UTF-8 密码)
-  bytes confirm_password_digest = 3;   // SHA-256(nonce || UTF-8 确认密码)
+  bytes password_digest = 2;           // SHA-256(UTF-8 密码) 32 字节；不含 nonce
+  bytes confirm_password_digest = 3;   // 同 password_digest
   uint32 zone_id = 4;
   uint32 game_type = 5;
   rpg.client.ProtocolVersion protocol_version = 6;
-  bytes login_nonce = 7;
+  bytes login_nonce = 7;             // 回显 S2CLoginChallenge.nonce（16 字节）
 }
 
 // S→C module=0x00 sub=0x04
