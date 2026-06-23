@@ -35,7 +35,7 @@ message S2CLoginChallenge {
   bytes nonce = 1; // 16 字节随机数
 }
 
-// S→C module=0x00 sub=0x02
+// S→C module=0x00 sub=0x02；仅 LoginServer 9010 账号登录结果
 message S2CLoginRsp {
   int32 code = 1;
   string msg = 2;
@@ -104,6 +104,20 @@ message S2CGatewayInfo {
   string gateway_ip = 2;
   uint32 gateway_port = 3;
   string msg = 4;
+}
+
+// S→C module=0x00 sub=0x11；Gateway 票据鉴权结果
+message S2CGatewayAuthRsp {
+  int32 code = 1;
+  string msg = 2;
+  uint64 accid = 3;
+}
+
+// S→C module=0x00 sub=0x12；选角进世界结果（成功时另发 S2C_ENTER_GAME）
+message S2CEnterWorldRsp {
+  int32 code = 1;
+  string msg = 2;
+  uint64 user_id = 3;
 }
 
 // S→C module=0x00 sub=0x09

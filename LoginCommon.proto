@@ -25,6 +25,8 @@ enum LoginMsgSub {
   C2S_LOGOUT_REQ = 14;         // 0x0E C→S 离世界；Gateway
   S2C_LOGOUT_RSP = 15;         // 0x0F S→C 离世界响应；Gateway
   S2C_LOGIN_CHALLENGE = 16;    // 0x10 S→C 登录挑战 nonce；LoginServer 连接后首包
+  S2C_GATEWAY_AUTH_RSP = 17;   // 0x11 S→C Gateway 票据鉴权结果
+  S2C_ENTER_WORLD_RSP = 18;    // 0x12 S→C 选角进世界结果（成功时另发 S2C_ENTER_GAME）
 }
 
 enum LogoutAction {
