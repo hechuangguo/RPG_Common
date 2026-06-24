@@ -1,0 +1,11 @@
+{
+  "mapId": 1001,
+  "name": "新手村",
+  "version": 1,
+  "scenePath": "Assets/_Project/Scenes/World_1001.unity",
+  "size": { "width": 40, "height": 30 },
+  "tileSize": { "width": 64, "height": 32 },
+  "defaultSpawn": { "x": 0, "y": 0, "z": 0 },
+  "maxPlayers": 50,
+  "description": "新手出生村庄"
+}

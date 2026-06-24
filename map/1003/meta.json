@@ -1,0 +1,11 @@
+{
+  "mapId": 1003,
+  "name": "仙侠主城",
+  "version": 1,
+  "scenePath": "Assets/_Project/Scenes/MainCity.scene",
+  "size": { "width": 40, "height": 30 },
+  "tileSize": { "width": 64, "height": 32 },
+  "defaultSpawn": { "x": 0, "y": 0, "z": 5 },
+  "maxPlayers": 100,
+  "description": "仙侠风格主城，含铁匠铺、当铺、宠物店、城主府、商店"
+}

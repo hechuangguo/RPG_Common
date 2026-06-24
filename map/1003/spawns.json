@@ -1,0 +1,7 @@
+{
+  "spawns": [
+    { "id": "player_default", "x": 0, "y": 0, "z": 5 },
+    { "id": "npc_vendor_01", "x": 8, "y": 0, "z": 10, "npcTemplateId": 1001 },
+    { "id": "npc_guard_01", "x": 20, "y": 0, "z": 15, "npcTemplateId": 2001 }
+  ]
+}

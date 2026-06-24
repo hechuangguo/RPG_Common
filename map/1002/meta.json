@@ -1,0 +1,11 @@
+{
+  "mapId": 1002,
+  "name": "原野地图",
+  "version": 1,
+  "scenePath": "Assets/_Project/Scenes/World_1002.unity",
+  "size": { "width": 40, "height": 30 },
+  "tileSize": { "width": 64, "height": 32 },
+  "defaultSpawn": { "x": 0, "y": 0, "z": 0 },
+  "maxPlayers": 100,
+  "description": "含河流、商店、当铺、拍卖行、武馆、客栈、广场"
+}
