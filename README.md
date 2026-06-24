@@ -47,12 +47,16 @@ Server 详细文档：[RPG/docs/COMMON.md](https://github.com/hechuangguo/RPG/bl
 
 ---
 
-## 修改协议
+## 修改协议与共享数据
 
-1. 在 `Common/` 子模块目录内编辑 `.proto`、`git commit`、`git push origin main`
-2. 回到主仓库执行 `./scripts/gen_proto.sh`（或 `./Build.sh`）刷新 `Protobuf/`
-3. 主仓库 commit submodule 指针
-4. 对方执行 `./pull.sh`
+**客户端与服务端均可**在各自主仓的 `Common/` 子模块内编辑、提交、推送：
+
+1. 在 `Common/` 内编辑 `.proto` 或 `map/` → `git commit` → `git push origin main`（RPG_Common 仓）
+2. 回到主仓：刷新生成物（Server：`gen_proto.sh`；Client：`sync_protobuf.ps1`）
+3. 主仓 `git add Common` 并 commit submodule 指针
+4. 对方执行 `sync_common` / `pull.sh` 拉取
+
+RPG_Client 推荐：`.\scripts\commit_push_all.ps1 -m "..."` 自动先推 Common 再推主仓。
 
 ---
 

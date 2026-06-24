@@ -18,6 +18,7 @@ message UserListEntry {
   uint32 level = 3;     // 等级
   uint32 vocation = 4;  // 职业
   uint32 sex = 5;       // 性别
+  uint32 model_id = 6;  // 角色模型ID（1=男大 2=男小 3=女大 4=女小）
 }
 
 // C→S module=0x00 sub=0x01
@@ -89,6 +90,7 @@ message C2SCreateUserReq {
   string name = 1;     // 2–12 码点 UTF-8
   uint32 vocation = 2;
   uint32 sex = 3;
+  uint32 model_id = 4; // 角色模型ID（1=男大 2=男小 3=女大 4=女小）
 }
 
 // S→C module=0x00 sub=0x08
@@ -131,6 +133,7 @@ message S2CEnterGame {
   uint32 max_hp = 7;
   uint32 mp = 8;
   uint32 max_mp = 9;
+  uint32 model_id = 10; // 角色模型ID（1=男大 2=男小 3=女大 4=女小）
 }
 
 // C→S module=0x00 sub=0x0E；离世界/退出。body 为纯 Protobuf
