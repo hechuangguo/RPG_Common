@@ -1,0 +1,7 @@
+{
+  "npcs": [
+    { "type": "vendors", "count": 5 },
+    { "type": "civilians", "count": 10 },
+    { "type": "guards", "count": 3 }
+  ]
+}
